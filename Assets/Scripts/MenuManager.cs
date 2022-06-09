@@ -1,19 +1,33 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
     public int bubbleSpawnCount = 5;
+    public TextMeshProUGUI highscoreText;
+    public string highscoreTextFormat = "HIGHSCORE: {s}";
     public GameObject main;
     public GameObject options;
     public GameObject optionsButton;
 
     private void Start()
     {
+        // Load gameinfo
         GameGlobals.gameInfo = GameInfoSerialiser.LoadGameInfo();
+        
+        // Set highscore text
+        highscoreText.text = highscoreTextFormat.Replace("{s}", 
+            GameGlobals.gameInfo.highscore.ToString());
+        
+        // Configure menu objects
         options.SetActive(false);
         main.SetActive(true);
+        
+        // Update state
         GameGlobals.inMainMenu = true;
+        
+        // Spawn 10 bubbles
         ObjectSpawner spawner = GetComponent<ObjectSpawner>();
         if (Application.platform == RuntimePlatform.WebGLPlayer)
             optionsButton.SetActive(false);
