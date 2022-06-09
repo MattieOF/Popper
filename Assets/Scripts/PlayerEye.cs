@@ -4,12 +4,19 @@ public class PlayerEye : MonoBehaviour
 {
     public float factor = 0.25f;
     public float limit  = 0.08f;
+    public bool  dead = false;
 
     private Vector3 _center;
 
     void Update()
     {
         _center = transform.parent.position;
+        
+        if (dead)
+        {
+            transform.position = _center;
+            return;
+        }
 
         // Convert mouse position into a local space vector3
         Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

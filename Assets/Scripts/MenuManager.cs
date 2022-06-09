@@ -13,8 +13,9 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        // Load gameinfo
-        GameGlobals.gameInfo = GameInfoSerialiser.LoadGameInfo();
+        // Load gameinfo if needed
+        if (GameGlobals.gameInfo is null)
+            GameGlobals.gameInfo = GameInfoSerialiser.LoadGameInfo();
         
         // Set highscore text
         highscoreText.text = highscoreTextFormat.Replace("{s}", 

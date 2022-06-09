@@ -21,6 +21,10 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
+        // Load gameinfo if needed
+        if (GameGlobals.gameInfo is null)
+            GameGlobals.gameInfo = GameInfoSerialiser.LoadGameInfo();
+        
         GameGlobals.menuOpen = false;
         StartGame();
         RefreshBubbleCountText();
@@ -121,8 +125,11 @@ public class Manager : MonoBehaviour
 
     public void Restart()
     {
+        // Set state
         GameGlobals.alive = true;
         bubbleCount = 0;
+        
+        // Reset scene
         DestroyAllBubbles();
         RefreshBubbleCountText();
         player.Restart();

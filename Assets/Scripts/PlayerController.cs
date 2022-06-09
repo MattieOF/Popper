@@ -1,11 +1,5 @@
 using UnityEngine;
 
-public struct PlayerPos
-{
-    public Vector3 position;
-    public Quaternion rotation;
-}
-
 public class PlayerController : MonoBehaviour
 {
     public  Camera       cam;
@@ -47,8 +41,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    rb.MovePosition(mousePos);
-                    rb.velocity = Vector2.zero;
+                    ResetTo(mousePos);
                     Destroy(AudioUtil.PlaySoundAtPos(transform.position, tpSound), 1f);
                 }
             } else
@@ -87,13 +80,15 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = (mousePos.WithZ(0) - _forceOrigin.WithZ(0)).normalized;
         Debug.Log($"Launching with a force of {force} in direction {dir}");
 
-        rb.AddForce(dir * force * (Grounded ? 100 : 20));
+        rb.AddForce(dir * (force * (Grounded ? 100 : 20)));
 
         Destroy(Instantiate(jumpParticle, playerHead.transform.position + (Vector3.down * 0.5f), Quaternion.identity), 1f);
     }
 
     public void ResetTo(Vector3 pos)
     {
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0;
         rb.MovePosition(pos);
         rb.SetRotation(0);
     }

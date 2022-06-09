@@ -3,11 +3,32 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
+    [System.Serializable]
+    public class PlayerEyeReferences
+    {
+        public PlayerEye eye;
+        public SpriteRenderer spriteRenderer;
+
+        public void Reset(Sprite playerEyeSprite)
+        {
+            spriteRenderer.transform.localScale = Vector3.one;
+            spriteRenderer.sprite = playerEyeSprite;
+            spriteRenderer.color = Color.white;
+            eye.dead = false;
+        }
+    }
+    
+    [Header("Scene References")]
     public PlayerController playerController;
 
+    [Header("Asset References")] 
+    public Sprite playerEyeSprite;
+    public Sprite crossSprite;
+
+    [Header("Player State")]
     public float health = 1f;
     public float healthLossRate = 0.25f;
-    public SpriteRenderer[] eyes;
+    public PlayerEyeReferences[] eyes;
     public Healthbar healthbar;
     public Manager manager;
     public bool dead = false;
@@ -89,10 +110,10 @@ public class Player : MonoBehaviour
     public void UpdateEyeColour()
     {
         Color newColour = Color.Lerp(Color.red, Color.white, health / _maxHealth);
-        foreach (SpriteRenderer sr in eyes)
-            sr.color = newColour;
+        foreach (PlayerEyeReferences eye in eyes)
+            eye.spriteRenderer.color = newColour;
     }
-
+    
     public void CollectedBubble()
     {
         _timeSinceLastBubble = 0;
@@ -100,16 +121,26 @@ public class Player : MonoBehaviour
 
     public void Die(Vector3 dir)
     {
+        // Set state values
         health = 0;
         dead = true;
         healthbar.SetValue(0);
-        UpdateEyeColour();
+        
+        // Update eyes
+        foreach (PlayerEyeReferences eye in eyes)
+        {
+            eye.spriteRenderer.transform.localScale = Vector3.one * 0.5f;
+            eye.spriteRenderer.sprite = crossSprite;
+            eye.spriteRenderer.color = Color.red;
+            eye.eye.dead = true;
+        }
 
         // Reset powerup timers
         _damageDownTime = 0;
         _tpTime = 0;
         UpdatePowerupHUD();
 
+        // Blood particles
         if (dir != Vector3.zero)
             Destroy(Instantiate(bloodParticle, playerHead.position, Quaternion.Euler(0, 0, Vector3.Angle(transform.position, dir))), 3f);
         else
@@ -120,10 +151,15 @@ public class Player : MonoBehaviour
 
     public void Heal(float amount)
     {
+        // Can't heal if dead
         if (dead) return;
+        
+        // Add to health and check ranges
         health += amount;
         if (health > _maxHealth) health = _maxHealth;
         if (health <= 0) Die(Vector3.zero);
+        
+        // Update HUD
         healthbar.SetValue(health);
     }
 
@@ -136,5 +172,9 @@ public class Player : MonoBehaviour
         healthbar.SetValue(health);
         UpdateEyeColour();
         powerupUpgrade = 0;
+        
+        // Reset eyes
+        foreach (PlayerEyeReferences eye in eyes)
+            eye.Reset(playerEyeSprite);
     }
 }
