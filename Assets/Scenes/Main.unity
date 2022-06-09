@@ -869,18 +869,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objects:
   - gameObject: {fileID: 4032353793370244347, guid: e2ea5b9eca8c47c47b3436efc35bfb50, type: 3}
-    weight: 26
+    weight: 6
   - gameObject: {fileID: 2703179197689726240, guid: 6cc6bc854ab6a22458f1c1028bef008e, type: 3}
-    weight: 5
+    weight: 2
   - gameObject: {fileID: 4073485445907552997, guid: 1b315c2150f7cbe4392f5c62826c70d3, type: 3}
     weight: 2
   - gameObject: {fileID: 5281876229924429511, guid: 5db5b0c655e415f4da7b9515fe3d2c12, type: 3}
-    weight: 2
+    weight: 3
   - gameObject: {fileID: 8812048415817951828, guid: 718841ea50114b4448ab2ea4c0758a11, type: 3}
-    weight: 1
+    weight: 2
   - gameObject: {fileID: 5438746841372910812, guid: 92357119c941549469ff0998b2db09fc, type: 3}
-    weight: 0.5
+    weight: 1
   bounds: {x: 14, y: 6, z: 0}
+  totalWeight: 16
 --- !u!1 &343835778
 GameObject:
   m_ObjectHideFlags: 0
@@ -6560,6 +6561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factor: 0.25
   limit: 0.04
+  dead: 0
 --- !u!1 &1727061860
 GameObject:
   m_ObjectHideFlags: 0
@@ -6931,6 +6933,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   factor: 0.25
   limit: 0.04
+  dead: 0
 --- !u!212 &1995426739
 SpriteRenderer:
   m_ObjectHideFlags: 0

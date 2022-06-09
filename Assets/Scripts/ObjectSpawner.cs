@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class SpawnerObject
@@ -13,7 +14,7 @@ public class ObjectSpawner : MonoBehaviour
     public List<SpawnerObject> objects;
     public Vector3             bounds;
 
-    private float _totalWeight;
+    [FormerlySerializedAs("_totalWeight")] public float totalWeight;
 
     private void Start()
     {
@@ -22,17 +23,17 @@ public class ObjectSpawner : MonoBehaviour
 
     public void CalculateTotalWeight()
     {
-        _totalWeight = 0;
+        totalWeight = 0;
         foreach (SpawnerObject so in objects)
         {
-            _totalWeight += so.weight;
+            totalWeight += so.weight;
         }
     }
 
     public GameObject GetObjectFromNumber(float value)
     {
-        if (value > _totalWeight) CalculateTotalWeight();
-        if (value > _totalWeight) return null;
+        if (value > totalWeight) CalculateTotalWeight();
+        if (value > totalWeight) return null;
 
         GameObject currentObject;
         float      currentWeight = 0;
@@ -61,7 +62,7 @@ public class ObjectSpawner : MonoBehaviour
 
     public void Spawn()
     {
-        float number = Random.Range(0, _totalWeight);
+        float number = Random.Range(0, totalWeight);
         Instantiate(GetObjectFromNumber(number), GetPointInBounds(), Quaternion.identity);
     }
 
