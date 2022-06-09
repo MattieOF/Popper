@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DMGDownPowerup : MonoBehaviour
+public class DmgDownPowerup : MonoBehaviour
 {
     public float     powerupLength = 20;
     public float     healAmount    = 0.25f;

@@ -11,7 +11,7 @@ public class TeleportPowerup : MonoBehaviour
         if (GameGlobals.alive && collision.gameObject.tag == "Player")
         {
             Player player = collision.gameObject.GetComponentInParent<Player>();
-            player.EnableTP(powerupLength);
+            player.EnableTp(powerupLength);
             player.Heal(healAmount);
             player.CollectedBubble();
             Destroy(AudioUtil.PlaySoundAtPos(collision.transform.position, pickupSound), 1f);

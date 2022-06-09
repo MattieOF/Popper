@@ -13,7 +13,7 @@ public class ObjectSpawner : MonoBehaviour
     public List<SpawnerObject> objects;
     public Vector3             bounds;
 
-    private float totalWeight;
+    private float _totalWeight;
 
     private void Start()
     {
@@ -22,17 +22,17 @@ public class ObjectSpawner : MonoBehaviour
 
     public void CalculateTotalWeight()
     {
-        totalWeight = 0;
+        _totalWeight = 0;
         foreach (SpawnerObject so in objects)
         {
-            totalWeight += so.weight;
+            _totalWeight += so.weight;
         }
     }
 
     public GameObject GetObjectFromNumber(float value)
     {
-        if (value > totalWeight) CalculateTotalWeight();
-        if (value > totalWeight) return null;
+        if (value > _totalWeight) CalculateTotalWeight();
+        if (value > _totalWeight) return null;
 
         GameObject currentObject;
         float      currentWeight = 0;
@@ -61,7 +61,7 @@ public class ObjectSpawner : MonoBehaviour
 
     public void Spawn()
     {
-        float number = Random.Range(0, totalWeight);
+        float number = Random.Range(0, _totalWeight);
         Instantiate(GetObjectFromNumber(number), GetPointInBounds(), Quaternion.identity);
     }
 

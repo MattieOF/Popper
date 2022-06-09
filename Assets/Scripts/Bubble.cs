@@ -9,12 +9,12 @@ public class Bubble : MonoBehaviour
     public  SoundGroup  popSounds;
     public  GameObject  popParticle;
 
-    private Manager     manager;
+    private Manager     _manager;
 
     private void Start()
     {
         if (GameGlobals.inMainMenu) return;
-        manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<Manager>();
+        _manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<Manager>();
         Invoke("Pop", autoDestroyTime);
     }
 
@@ -32,7 +32,7 @@ public class Bubble : MonoBehaviour
             player.Heal(healAmount);
             player.CollectedBubble();
             Pop();
-            manager.AddBubble();
+            _manager.AddBubble();
         }
     }
 

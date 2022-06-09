@@ -17,7 +17,7 @@ public class Manager : MonoBehaviour
     public float           bubbleSpawnRate   = 5f;
     public int             bubbleCount       = 0;
 
-    private System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+    private System.Diagnostics.Stopwatch _stopwatch = new System.Diagnostics.Stopwatch();
 
     private void Start()
     {
@@ -32,7 +32,7 @@ public class Manager : MonoBehaviour
     public void StartGame()
     {
         GameGlobals.alive = true;
-        stopwatch.Start();
+        _stopwatch.Start();
         StartSpawning();
     }
 
@@ -44,7 +44,7 @@ public class Manager : MonoBehaviour
             else ShowPauseMenu();
         }
 
-        timeText.text = stopwatch.Elapsed.ToString("g").Split('.')[0];
+        timeText.text = _stopwatch.Elapsed.ToString("g").Split('.')[0];
     }
 
     public void ShowPauseMenu()
@@ -129,16 +129,16 @@ public class Manager : MonoBehaviour
         StartSpawning();
         gameOverUI.SetActive(false);
         HideGameOverUI();
-        stopwatch.Restart();
+        _stopwatch.Restart();
     }
 
     public void GameOver()
     {
         GameGlobals.alive = false;
-        stopwatch.Stop();
-        gameOverTimeText.text = stopwatch.Elapsed.ToString("g").Split('.')[0];
-        if (GameGlobals.gameInfo.bestTime < stopwatch.Elapsed.TotalSeconds)
-            GameGlobals.gameInfo.bestTime = stopwatch.Elapsed.TotalSeconds;
+        _stopwatch.Stop();
+        gameOverTimeText.text = _stopwatch.Elapsed.ToString("g").Split('.')[0];
+        if (GameGlobals.gameInfo.bestTime < _stopwatch.Elapsed.TotalSeconds)
+            GameGlobals.gameInfo.bestTime = _stopwatch.Elapsed.TotalSeconds;
         gameOverHighscoreText.SetActive(false);
         if (GameGlobals.gameInfo.highscore < bubbleCount)
         {

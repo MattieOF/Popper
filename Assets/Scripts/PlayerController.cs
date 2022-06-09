@@ -20,17 +20,11 @@ public class PlayerController : MonoBehaviour
 
     // public  float        headRotationLimit = 70f;
 
-    private bool         cancelMove        = false;
-    private bool         forceUIActive     = false;
-    private Vector3      forceOrigin       = Vector3.zero;
+    private bool         _cancelMove        = false;
+    private bool         _forceUIActive     = false;
+    private Vector3      _forceOrigin       = Vector3.zero;
 
-    public bool Grounded
-    {
-        get
-        {
-            return Physics2D.OverlapBox(playerHead.position + (Vector3.down * 0.12f), new Vector2(0.1f, 1.2f), 0, LayerMask.GetMask("Default"));
-        }
-    }
+    public bool Grounded => Physics2D.OverlapBox(playerHead.position + (Vector3.down * 0.12f), new Vector2(0.1f, 1.2f), 0, LayerMask.GetMask("Default"));
 
     private void Start()
     {
@@ -44,12 +38,12 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            cancelMove = true;
+            _cancelMove = true;
         }
-        else if (!cancelMove && Input.GetMouseButton(0))
+        else if (!_cancelMove && Input.GetMouseButton(0))
         {
             Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-            if (player.TPActive)
+            if (player.TpActive)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -59,29 +53,29 @@ public class PlayerController : MonoBehaviour
                 }
             } else
             {
-                forceUIActive = true;
-                if (Input.GetMouseButtonDown(0) || forceOrigin == null) forceOrigin = mousePos;
+                _forceUIActive = true;
+                if (Input.GetMouseButtonDown(0) || _forceOrigin == null) _forceOrigin = mousePos;
             }
         }
         else
         {
             if (Input.GetMouseButtonUp(0)) Shoot();
-            if (!Input.GetMouseButton(0)) cancelMove = false;
+            if (!Input.GetMouseButton(0)) _cancelMove = false;
             DisableForceUI();
         }
 
-        if (forceUIActive)
+        if (_forceUIActive)
         {
             Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-            forceUI.SetPosition(0, forceOrigin.WithZ(0));
+            forceUI.SetPosition(0, _forceOrigin.WithZ(0));
             forceUI.SetPosition(1, mousePos.WithZ(0));
         }
     }
 
     public void DisableForceUI()
     {
-        if (!forceUIActive) return;
-        forceUIActive = false;
+        if (!_forceUIActive) return;
+        _forceUIActive = false;
         forceUI.SetPosition(0, Vector3.zero);
         forceUI.SetPosition(1, Vector3.zero);
     }
@@ -89,8 +83,8 @@ public class PlayerController : MonoBehaviour
     public void Shoot()
     {
         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        float force = Vector3.Distance(forceOrigin, mousePos);
-        Vector3 dir = (mousePos.WithZ(0) - forceOrigin.WithZ(0)).normalized;
+        float force = Vector3.Distance(_forceOrigin, mousePos);
+        Vector3 dir = (mousePos.WithZ(0) - _forceOrigin.WithZ(0)).normalized;
         Debug.Log($"Launching with a force of {force} in direction {dir}");
 
         rb.AddForce(dir * force * (Grounded ? 100 : 20));

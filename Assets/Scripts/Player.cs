@@ -23,40 +23,34 @@ public class Player : MonoBehaviour
     public GameObject tpObject;
     public TextMeshProUGUI tpTimerText;
 
-    private float maxHealth;
-    private float timeSinceLastBubble = 0;
-    private float damageDownTime = 0;
-    private float tpTime = 0;
+    private float _maxHealth;
+    private float _timeSinceLastBubble = 0;
+    private float _damageDownTime = 0;
+    private float _tpTime = 0;
 
-    public bool DamageDownActive
-    {
-        get { return damageDownTime > 0; }
-    }
+    public bool DamageDownActive => _damageDownTime > 0;
 
-    public bool TPActive
-    {
-        get { return tpTime > 0; }
-    }
+    public bool TpActive => _tpTime > 0;
 
     private void Start()
     {
-        maxHealth = health;
+        _maxHealth = health;
     }
 
     private void Update()
     {
         if (dead) return;
 
-        if (!playerController.Grounded || timeSinceLastBubble > maxBubblelessTime)
+        if (!playerController.Grounded || _timeSinceLastBubble > maxBubblelessTime)
             health -= healthLossRate * Time.deltaTime * (DamageDownActive ? 0.1f : 1f);
 
         if (health <= 0)
             Die(Vector3.zero);
 
-        timeSinceLastBubble += Time.deltaTime;
+        _timeSinceLastBubble += Time.deltaTime;
 
-        if (DamageDownActive) damageDownTime -= Time.deltaTime;
-        if (TPActive) tpTime -= Time.deltaTime;
+        if (DamageDownActive) _damageDownTime -= Time.deltaTime;
+        if (TpActive) _tpTime -= Time.deltaTime;
         UpdatePowerupHUD();
 
         UpdateEyeColour();
@@ -65,12 +59,12 @@ public class Player : MonoBehaviour
 
     public void EnableDamageDown(float time)
     {
-        damageDownTime = time + (powerupUpgrade * 5);
+        _damageDownTime = time + (powerupUpgrade * 5);
     }
 
-    public void EnableTP(float time)
+    public void EnableTp(float time)
     {
-        tpTime = time + (powerupUpgrade * 2);
+        _tpTime = time + (powerupUpgrade * 2);
     }
 
     public void UpdatePowerupHUD()
@@ -78,15 +72,15 @@ public class Player : MonoBehaviour
         if (DamageDownActive)
         {
             damageDownObject.SetActive(true);
-            damageDownTimerText.text = $"{Mathf.RoundToInt(damageDownTime)}s";
+            damageDownTimerText.text = $"{Mathf.RoundToInt(_damageDownTime)}s";
         }
         else
             damageDownObject.SetActive(false);
 
-        if (TPActive)
+        if (TpActive)
         {
             tpObject.SetActive(true);
-            tpTimerText.text = $"{Mathf.RoundToInt(tpTime)}s";
+            tpTimerText.text = $"{Mathf.RoundToInt(_tpTime)}s";
         }
         else
             tpObject.SetActive(false);
@@ -94,14 +88,14 @@ public class Player : MonoBehaviour
 
     public void UpdateEyeColour()
     {
-        Color newColour = Color.Lerp(Color.red, Color.white, health / maxHealth);
+        Color newColour = Color.Lerp(Color.red, Color.white, health / _maxHealth);
         foreach (SpriteRenderer sr in eyes)
             sr.color = newColour;
     }
 
     public void CollectedBubble()
     {
-        timeSinceLastBubble = 0;
+        _timeSinceLastBubble = 0;
     }
 
     public void Die(Vector3 dir)
@@ -112,8 +106,8 @@ public class Player : MonoBehaviour
         UpdateEyeColour();
 
         // Reset powerup timers
-        damageDownTime = 0;
-        tpTime = 0;
+        _damageDownTime = 0;
+        _tpTime = 0;
         UpdatePowerupHUD();
 
         if (dir != Vector3.zero)
@@ -128,7 +122,7 @@ public class Player : MonoBehaviour
     {
         if (dead) return;
         health += amount;
-        if (health > maxHealth) health = maxHealth;
+        if (health > _maxHealth) health = _maxHealth;
         if (health <= 0) Die(Vector3.zero);
         healthbar.SetValue(health);
     }
@@ -136,7 +130,7 @@ public class Player : MonoBehaviour
     public void Restart()
     {
         playerController.ResetTo(defaultPosition);
-        timeSinceLastBubble = 0;
+        _timeSinceLastBubble = 0;
         dead = false;
         health = 1;
         healthbar.SetValue(health);

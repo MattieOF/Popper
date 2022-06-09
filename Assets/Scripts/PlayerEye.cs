@@ -5,11 +5,11 @@ public class PlayerEye : MonoBehaviour
     public float factor = 0.25f;
     public float limit  = 0.08f;
 
-    private Vector3 center;
+    private Vector3 _center;
 
     void Update()
     {
-        center = transform.parent.position;
+        _center = transform.parent.position;
 
         // Convert mouse position into a local space vector3
         Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -20,6 +20,6 @@ public class PlayerEye : MonoBehaviour
         dir.x = Mathf.Clamp(dir.x, -limit, limit);
         dir.y = Mathf.Clamp(dir.y, -limit, limit);
 
-        transform.position = center + dir;
+        transform.position = _center + dir;
     }
 }
